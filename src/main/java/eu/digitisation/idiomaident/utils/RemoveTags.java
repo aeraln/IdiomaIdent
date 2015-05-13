@@ -15,11 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package eu.digitisation.idiomaident;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+package eu.digitisation.idiomaident.utils;
 
 /**
  *
@@ -28,6 +24,15 @@ import java.io.FileReader;
 public class RemoveTags
 {    
     
+   public static String removeTags (String st)
+   {        
+        String noTags = st.replaceAll("<[^>]*>","");
+        
+        return noTags;
+                     
+   }
+   
+   /*
    public static String removeTags (File file) throws Exception
    {
         StringBuilder sb = new StringBuilder();
@@ -39,11 +44,13 @@ public class RemoveTags
         String noTags = sb.toString().replaceAll("<[^>]*>","");
         
         return noTags;
-        /*
+        
         BufferedWriter writer = new BufferedWriter(new FileWriter(outfileName));
             writer.write(xml.getText(infile.getAbsolutePath()));
             writer.close();
-        */                
+                        
    }
+   */
+   
 }
 
