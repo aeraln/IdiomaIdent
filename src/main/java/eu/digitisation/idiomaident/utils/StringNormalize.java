@@ -25,7 +25,7 @@ public class StringNormalize
         result = Normalizer.normalize(result, Normalizer.Form.NFC);
         
         //Remove upper-case letters
-        result = result.toLowerCase();
+        //result = result.toLowerCase();
         
         //Remove punctuation
         result = StringNormalizer.removePunctuation(result);
