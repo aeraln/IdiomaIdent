@@ -75,10 +75,32 @@ public class ToCsv
                 
             }
             
+            double total = Double.parseDouble(sArray[7]);
+            
+            //filtro
+            if ( total < 1000)
+                return null;
+            
+            if ( sArray[0].length() > 5 )
+                return null;
+            
+            if ( sArray[0].matches(".*[¼™!\"#$%&()©€*+,-./:;<=>?@\\^_`{|}~]+.*"))
+                return null;
+            
+            if ( sArray[0].matches(".*\\{Digit}+.*"))
+                return null;
+            
+            //porcentajes
+            for (int i = 1; i<7; i++)
+            {
+                sArray[i] = String.format("%.3g", Double.parseDouble(sArray[i]) / total);
+            }
+            
+            
             StringBuilder sbuild = new StringBuilder();
             
             for (String trozo : sArray)
-            {
+            {                
                 sbuild.append(trozo);
                 sbuild.append('\t');
             }
@@ -119,7 +141,8 @@ public class ToCsv
                 if (!line.contains("\""))
                 {
                     String sOut = buildString(line);
-                    buffwriter.write(sOut);
+                    if(sOut != null)
+                        buffwriter.write(sOut);
                 }
             }
 
@@ -135,6 +158,7 @@ public class ToCsv
                     freader.close();
                 } catch (IOException ex)
                 {
+                    System.out.println("Error finaly freader");
                     System.out.println(ex.toString());
                 }
             }
@@ -147,6 +171,7 @@ public class ToCsv
                     buffwriter.close();
                 } catch (IOException ex)
                 {
+                    System.out.println("Error finaly buffwriter");
                     System.out.println(ex.toString());
                 }
             }
@@ -154,11 +179,11 @@ public class ToCsv
             if (fwriter != null)
             {
                 try
-                {
-                    fwriter.flush();
+                {                    
                     fwriter.close();
                 } catch (IOException ex)
                 {
+                    System.out.println("Error finaly fwriter");
                     System.out.println(ex.toString());
                 }
             }                        

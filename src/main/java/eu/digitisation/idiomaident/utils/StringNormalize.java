@@ -28,7 +28,10 @@ public class StringNormalize
         //result = result.toLowerCase();
         
         //Remove punctuation
-        result = StringNormalizer.removePunctuation(result);
+        //result = StringNormalizer.removePunctuation(result);
+        
+        //Remove special characters and numbers
+        result = result.replaceAll("[\\[\\]/\"\\p{N},;)(-]", "");
         
         return result;
         

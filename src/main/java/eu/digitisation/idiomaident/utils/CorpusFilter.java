@@ -18,13 +18,11 @@
 package eu.digitisation.idiomaident.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.HashSet;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -58,6 +56,13 @@ public class CorpusFilter
         return map;
     }
 
+    private static HashSet getPosibleNames(String text)
+    {
+        //TODO Create a hashset
+        
+        return null;
+    }
+    
     public static void filter(File in, File out, String refLanguage)
     {
         actualFile = new HashMap<>();
@@ -65,9 +70,7 @@ public class CorpusFilter
         //first obtain the list of language folders
         folderList = getFolderList(in);
 
-        //foreach file in the folder of the reference language
-        //Then we search in the text of the reference language for words with the 
-        //first caracter in uppercase.
+        //foreach file in the folder of the reference language        
         //Last, we search for this word in the others language and if occurs in almost all
         //remove all occurrences (personal names).
         File refLangFolder = folderList.get(refLanguage);
@@ -77,7 +80,7 @@ public class CorpusFilter
             @Override
             public boolean accept(File file, String name)
             {
-                return !file.isDirectory();
+                return name.endsWith(".txt");                
             }
         });
 
@@ -90,7 +93,7 @@ public class CorpusFilter
             {
                 //First we populate the actualFile hashmap with the same file
                 //of the rest of languages, normalizing the text and removing the
-                //puntuation and the xml tags.
+                //special characters and the xml tags.
 
                 for (String language : folderList.keySet())
                 {
@@ -98,13 +101,13 @@ public class CorpusFilter
 
                     if (languageFile.exists())
                     {
-                        String text = FileUtils.readFileToString(textFile, Charset.forName("UTF-8"));
+                        String text = FileUtils.readFileToString(languageFile, Charset.forName("UTF-8"));
                         text = StringNormalize.stringNormalize(text);
 
                         actualFile.put(language, text);
 
                         //Copy the filter file in out folder
-                        FileUtils.writeStringToFile(new File(out.getAbsolutePath() + "/" + language + "/" + fileName), text);
+                        //FileUtils.writeStringToFile(new File(out.getAbsolutePath() + "/" + language + "/" + fileName), text);
                     }
 
                 }
@@ -113,6 +116,12 @@ public class CorpusFilter
             {
                 System.err.println("Error: " + ex.toString());
             }
+            
+            //Then we search in the text of the reference language for words with the 
+            //first caracter in uppercase.
+            HashSet posibleName;
+            
+            posibleName = getPosibleNames(actualFile.get(refLanguage));
 
         }
 
@@ -140,5 +149,7 @@ public class CorpusFilter
             }
         }
     }
+
+    
 
 }
