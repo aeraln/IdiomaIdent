@@ -17,6 +17,7 @@
  */
 package eu.digitisation.idiomaident.utils;
 
+import eu.digitisation.text.WordScanner;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -58,7 +59,29 @@ public class CorpusFilter
 
     private static HashSet getPosibleNames(String text)
     {
-        //TODO Create a hashset
+        HashSet<String> posibleNames = new HashSet();
+        
+        try
+        {
+            WordScanner scanner = new WordScanner(text);
+            
+            String word = "";
+            
+            while ( (word = scanner.nextWord()) != null )
+            {
+                //check the first letter
+                if(word.matches("\\p{Upper}+.*"))
+                {
+                    posibleNames.add(word);
+                }
+            }
+            
+            return posibleNames;
+        } 
+        catch (IOException ex)
+        {
+            System.out.println(ex.getMessage());
+        }                
         
         return null;
     }
@@ -84,10 +107,13 @@ public class CorpusFilter
             }
         });
 
+        int num = 0;
         for (File textFile : filesInFolder)
         {
             String fileName = textFile.getName();
             actualFile.clear();
+            num++;
+            System.out.println("Processing " + num +" of " + filesInFolder.length);
 
             try
             {
@@ -105,9 +131,7 @@ public class CorpusFilter
                         text = StringNormalize.stringNormalize(text);
 
                         actualFile.put(language, text);
-
-                        //Copy the filter file in out folder
-                        //FileUtils.writeStringToFile(new File(out.getAbsolutePath() + "/" + language + "/" + fileName), text);
+                        
                     }
 
                 }
@@ -119,14 +143,69 @@ public class CorpusFilter
             
             //Then we search in the text of the reference language for words with the 
             //first caracter in uppercase.
-            HashSet posibleName;
+            HashSet<String> posibleNames;
             
-            posibleName = getPosibleNames(actualFile.get(refLanguage));
+            posibleNames = getPosibleNames(actualFile.get(refLanguage));
 
+            //System.out.println(posibleNames.toString());
+            
+            eliminateNames(posibleNames, actualFile);
+            
+            for (String lang : actualFile.keySet())
+            {
+                try
+                {
+                    //Copy the filter file in out folder
+                    FileUtils.writeStringToFile(new File(out.getAbsolutePath() + "/" + lang + "/" + fileName), actualFile.get(lang));
+                } 
+                catch (IOException ex)
+                {
+                    System.err.println("Error: " + ex.toString());
+                }
+            }
+            
         }
-
     }
 
+    private static void eliminateNames(HashSet<String> posibleNames, HashMap<String, String> actualFile)
+    {
+        for (String name : posibleNames)
+        {
+            //Check if the name is in allmost the others languages
+            double totalLenguages = actualFile.size();
+            
+            int goal = (int) (totalLenguages * 0.8); //80% of the lenguages
+            
+            int contains = 0;
+            
+            for (String lang : actualFile.keySet())
+            {
+                if(actualFile.get(lang).contains(name))
+                {
+                    contains++;
+                }
+            }
+            
+            if (contains >= goal) //Eliminate the name
+            {
+                //System.out.println(name);
+                
+                for (String lang : actualFile.keySet())
+                {
+                    String text = actualFile.get(lang);
+                    
+                    String replacement = "(\\p{Space}|\\p{Punct})+" + name + "(\\p{Space}|\\p{Punct})+";
+                    
+                    text = text.replaceAll(replacement, " ");
+                    
+                    actualFile.put(lang, text);
+                }
+            }
+            
+            
+        }
+    }
+    
     public static void main(String args[])
     {
         if (args.length < 2)
@@ -149,6 +228,8 @@ public class CorpusFilter
             }
         }
     }
+
+    
 
     
 
