@@ -18,6 +18,7 @@
 package eu.digitisation.idiomaident;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -28,6 +29,7 @@ public class TrieNode
 
     private Character gliph;
     private HashMap<Character, TrieNode> childrens;
+    private HashSet<String> languages;
 
     /**
      * Constructor
@@ -36,14 +38,10 @@ public class TrieNode
     {
         gliph = g;
         childrens = null;
-    }
-
-    /**
-     * Adds a ngram to the Trie
-     *
-     * @param ngram
-     */
-    public void addNgram(String ngram)
+        languages = null;
+    }   
+    
+    public void addNgram(String ngram, HashSet langs)
     {
         if (!ngram.isEmpty())
         {
@@ -59,8 +57,42 @@ public class TrieNode
                 childrens.put(g, new TrieNode(g));
             }
 
-            childrens.get(g).addNgram(ngram.substring(1));
+            childrens.get(g).addNgram(ngram.substring(1), langs);
+        }
+        else
+        {
+            if (langs != null)
+                languages = new HashSet<>(langs);
         }
 
     }
+    
+    public HashSet characteristicLang(String ngram)
+    {
+        if(languages != null && languages.size() == 1)
+        {
+            //this ngram and all his posible descendants has an only characteristic language, so stop the search
+            return languages;
+        }
+        
+        if (!ngram.isEmpty())
+        {
+            Character g = ngram.charAt(0);
+            
+            if(childrens.containsKey(g))
+            {
+                return childrens.get(g).characteristicLang(ngram.substring(1));
+            }   
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            //last character of ngram            
+            return languages;
+        }            
+    }
+    
 }

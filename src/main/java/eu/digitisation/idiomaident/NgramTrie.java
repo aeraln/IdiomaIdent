@@ -18,6 +18,7 @@
 package eu.digitisation.idiomaident;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -35,6 +36,11 @@ public class NgramTrie
 
     public void addNgram(String ngram)
     {
+        this.addNgram(ngram, null);                     
+    }
+    
+    public void addNgram(String ngram, HashSet langs)
+    {
         if(!ngram.isEmpty())
         {
             if (childrens == null)
@@ -47,10 +53,29 @@ public class NgramTrie
             if(!childrens.containsKey(gliph))
             {
                 childrens.put(gliph, new TrieNode(gliph));                
-            }
+            }            
             
-            childrens.get(gliph).addNgram(ngram.substring(1));
+            childrens.get(gliph).addNgram(ngram.substring(1), langs);
         }                        
+    }
+    
+    public HashSet characteristicLang(String ngram)
+    {
+        if (!ngram.isEmpty())
+        {
+            Character gliph = ngram.charAt(0);
+            
+            if(childrens.containsKey(gliph))
+            {
+                return childrens.get(gliph).characteristicLang(ngram.substring(1));
+            }   
+            else
+            {
+                return null;
+            }
+        }
+        else
+            return null;
     }
 
 }
