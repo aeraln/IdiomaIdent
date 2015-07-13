@@ -5,7 +5,6 @@
  */
 package eu.digitisation.idiomaident.utils;
 
-import eu.digitisation.text.StringNormalizer;
 import java.text.Normalizer;
 
 /**
@@ -31,7 +30,7 @@ public class StringNormalize
         //result = StringNormalizer.removePunctuation(result);
         
         //Remove special characters and numbers
-        result = result.replaceAll("[\\[\\]/\"\\p{N},;)(-]", "");
+        result = result.replaceAll("[%\\[\\]/\"\\p{N},;)(-]", " ");
         
         return result;
         

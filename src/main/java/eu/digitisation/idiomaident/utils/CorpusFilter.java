@@ -156,7 +156,7 @@ public class CorpusFilter
                 try
                 {
                     //Copy the filter file in out folder
-                    FileUtils.writeStringToFile(new File(out.getAbsolutePath() + "/" + lang + "/" + fileName), actualFile.get(lang));
+                    FileUtils.writeStringToFile(new File(out.getAbsolutePath() + "/" + lang + "/" + fileName), actualFile.get(lang), Charset.forName("UTF-8"));
                 } 
                 catch (IOException ex)
                 {
