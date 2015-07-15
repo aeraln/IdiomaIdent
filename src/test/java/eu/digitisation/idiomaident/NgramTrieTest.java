@@ -1,0 +1,94 @@
+/*
+ * Copyright (C) 2015 Impact
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+package eu.digitisation.idiomaident;
+
+import java.util.HashSet;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Impact
+ */
+public class NgramTrieTest
+{
+    
+    public NgramTrieTest()
+    {
+    }
+
+    /**
+     * Test of addNgram method, of class NgramTrie.
+     */
+    @Test
+    public void testAddNgram_String()
+    {   
+        NgramTrie instance = new NgramTrie();
+        instance.addNgram("hola");
+        instance.addNgram("adios");
+        
+        System.out.println(instance.treeNgrams().toString());
+    }
+
+    /**
+     * Test of addNgram method, of class NgramTrie.
+     */
+    @Test
+    public void testAddNgram_String_HashSet()
+    {
+        System.out.println("addNgram");
+        String ngram = "";
+        HashSet langs = null;
+        NgramTrie instance = new NgramTrie();
+        instance.addNgram(ngram, langs);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of characteristicLang method, of class NgramTrie.
+     */
+    @Test
+    public void testCharacteristicLang()
+    {
+        System.out.println("characteristicLang");
+        String ngram = "";
+        NgramTrie instance = new NgramTrie();
+        HashSet expResult = null;
+        HashSet result = instance.characteristicLang(ngram);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of treeNgrams method, of class NgramTrie.
+     */
+    @Test
+    public void testTreeNgrams()
+    {
+        System.out.println("treeNgrams");
+        NgramTrie instance = new NgramTrie();
+        HashSet<String> expResult = null;
+        HashSet<String> result = instance.treeNgrams();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+    
+}

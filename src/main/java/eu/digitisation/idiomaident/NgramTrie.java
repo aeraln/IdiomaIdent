@@ -77,5 +77,18 @@ public class NgramTrie
         else
             return null;
     }
+    
+    public HashSet<String> treeNgrams()
+    {
+        HashSet<String> ngrams = new HashSet<>();
+        
+        for (Character ch: childrens.keySet())
+        {
+            ngrams.addAll(childrens.get(ch).nodeNgrams(""));
+        }
+        
+        return ngrams;
+            
+    }
 
 }

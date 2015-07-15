@@ -43,8 +43,15 @@ public class TrieNode
     
     public void addNgram(String ngram, HashSet langs)
     {
+        
         if (!ngram.isEmpty())
-        {
+        {            
+            //this ngram and all his posible descendants has an only characteristic language, so stop the insertion
+            if(this.languages!=null && this.languages.size()==1)
+            {
+                return;
+            }
+            
             if (childrens == null)
             {
                 childrens = new HashMap<>();
@@ -93,6 +100,25 @@ public class TrieNode
             //last character of ngram            
             return languages;
         }            
+    }
+    
+    public HashSet<String> nodeNgrams(String ngram)
+    {
+        HashSet<String> ngrams = new HashSet<>();
+        
+        String nodeNgram = ngram + this.gliph;
+        
+        ngrams.add(nodeNgram);
+        
+        if (childrens != null)
+        {
+            for (Character ch: childrens.keySet())
+            {
+                ngrams.addAll(childrens.get(ch).nodeNgrams(nodeNgram));
+            }
+        }
+        
+        return ngrams;
     }
     
 }
