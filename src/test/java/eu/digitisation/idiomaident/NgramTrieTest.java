@@ -17,9 +17,14 @@
  */
 package eu.digitisation.idiomaident;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
+import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.rules.TemporaryFolder;
 
 /**
  *
@@ -32,17 +37,23 @@ public class NgramTrieTest
     {
     }
 
+    @Rule
+    public TemporaryFolder tempFolder= new TemporaryFolder();
+    
     /**
      * Test of addNgram method, of class NgramTrie.
      */
     @Test
     public void testAddNgram_String()
     {   
+        HashSet<String> result = new HashSet(Arrays.asList("h","ho","hol","hola","a","ad","adi","adio","adios"));
+                
+        
         NgramTrie instance = new NgramTrie();
         instance.addNgram("hola");
         instance.addNgram("adios");
         
-        System.out.println(instance.treeNgrams().toString());
+        Assert.assertEquals(result, instance.treeNgrams());
     }
 
     /**
@@ -50,14 +61,27 @@ public class NgramTrieTest
      */
     @Test
     public void testAddNgram_String_HashSet()
-    {
-        System.out.println("addNgram");
-        String ngram = "";
-        HashSet langs = null;
+    {        
+        
+        HashSet<String> result = new HashSet(Arrays.asList("h","ho","hol","hola"));
+        
         NgramTrie instance = new NgramTrie();
-        instance.addNgram(ngram, langs);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.addNgram("ho", new HashSet<>(Arrays.asList("es","en","fr")));
+        instance.addNgram("hol", new HashSet<>(Arrays.asList("es","en")));
+        instance.addNgram("hola", new HashSet<>(Arrays.asList("es")));
+        
+        Assert.assertEquals(result, instance.treeNgrams());  
+        
+        result = new HashSet(Arrays.asList("h","ho","hol"));
+        
+        instance = new NgramTrie();
+        instance.addNgram("ho", new HashSet<>(Arrays.asList("es","en")));
+        instance.addNgram("hol", new HashSet<>(Arrays.asList("es")));
+        
+        //this ngram whould not be inserted because her father have only one characteristic language
+        instance.addNgram("hola", new HashSet<>(Arrays.asList("es")));
+        
+        Assert.assertEquals(result, instance.treeNgrams());
     }
 
     /**
@@ -66,29 +90,50 @@ public class NgramTrieTest
     @Test
     public void testCharacteristicLang()
     {
-        System.out.println("characteristicLang");
-        String ngram = "";
+        HashSet<String> result = new HashSet(Arrays.asList("es","en","fr"));
+        
         NgramTrie instance = new NgramTrie();
-        HashSet expResult = null;
-        HashSet result = instance.characteristicLang(ngram);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of treeNgrams method, of class NgramTrie.
-     */
+        instance.addNgram("ho", new HashSet<>(Arrays.asList("es","en","fr")));
+        instance.addNgram("hol", new HashSet<>(Arrays.asList("es","en")));
+        instance.addNgram("hola", new HashSet<>(Arrays.asList("es")));
+        
+        Assert.assertEquals(result, instance.characteristicLang("ho"));  
+        
+        result = new HashSet(Arrays.asList("es"));
+        
+        instance = new NgramTrie();
+        instance.addNgram("ho", new HashSet<>(Arrays.asList("es","en")));
+        instance.addNgram("hola", new HashSet<>(Arrays.asList("es")));                
+        
+        Assert.assertEquals(result, instance.characteristicLang("hola"));
+        
+        result = new HashSet(Arrays.asList("es"));
+        
+        instance = new NgramTrie();
+        instance.addNgram("ho", new HashSet<>(Arrays.asList("es","en")));
+        instance.addNgram("hol", new HashSet<>(Arrays.asList("es")));                
+        
+        Assert.assertEquals(result, instance.characteristicLang("hola"));
+    }  
+    
     @Test
-    public void testTreeNgrams()
+    public void testSerialization() throws IOException
     {
-        System.out.println("treeNgrams");
+        HashSet<String> result = new HashSet(Arrays.asList("h","ho","hol","hola"));
+        
         NgramTrie instance = new NgramTrie();
-        HashSet<String> expResult = null;
-        HashSet<String> result = instance.treeNgrams();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.addNgram("ho", new HashSet<>(Arrays.asList("es","en","fr")));
+        instance.addNgram("hol", new HashSet<>(Arrays.asList("es","en")));
+        instance.addNgram("hola", new HashSet<>(Arrays.asList("es")));             
+        
+        File out = tempFolder.newFile("trie.tr");
+        instance.saveTrie(out);
+        
+        NgramTrie trieReaded;
+        
+        trieReaded = NgramTrie.readTrie(out);
+        
+        Assert.assertEquals(result, trieReaded.treeNgrams());
     }
     
 }

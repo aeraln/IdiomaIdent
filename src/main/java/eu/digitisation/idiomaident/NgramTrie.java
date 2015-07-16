@@ -17,6 +17,13 @@
  */
 package eu.digitisation.idiomaident;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -24,7 +31,7 @@ import java.util.HashSet;
  *
  * @author Impact
  */
-public class NgramTrie
+public class NgramTrie implements Serializable
 {
 
     HashMap<Character, TrieNode> childrens;
@@ -89,6 +96,73 @@ public class NgramTrie
         
         return ngrams;
             
+    }
+    
+    public void saveTrie(File out)
+    {
+        FileOutputStream fs = null;
+        ObjectOutputStream oos = null;
+        
+        try
+        {
+            fs = new FileOutputStream(out);
+            oos = new ObjectOutputStream(fs);
+            
+            oos.writeObject(this);  
+            oos.flush();
+            
+        }
+        catch (IOException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        finally 
+        {
+            try
+            {
+                if(oos != null)
+                    oos.close();
+            }
+            catch (IOException ex)
+            {
+                System.out.println(ex.getMessage());
+            }
+        }                
+    }
+    
+    public static NgramTrie readTrie(File in)
+    {
+        FileInputStream fs = null;
+        ObjectInputStream ois = null;
+        NgramTrie trie = null;
+        
+        try
+        {
+            fs = new FileInputStream(in);
+            ois = new ObjectInputStream(fs);
+            
+            trie = (NgramTrie)ois.readObject();
+            
+            
+        }
+        catch (IOException | ClassNotFoundException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        finally 
+        {
+            try
+            {
+                if(ois != null)
+                    ois.close();
+            }
+            catch (IOException ex)
+            {
+                System.out.println(ex.getMessage());
+            }
+        }  
+        
+        return trie;
     }
 
 }

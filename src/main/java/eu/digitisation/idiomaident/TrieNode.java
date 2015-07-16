@@ -17,6 +17,7 @@
  */
 package eu.digitisation.idiomaident;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -24,7 +25,7 @@ import java.util.HashSet;
  *
  * @author Impact
  */
-public class TrieNode
+public class TrieNode implements Serializable
 {
 
     private Character gliph;
