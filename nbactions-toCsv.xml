@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath eu.digitisation.idiomaident.utils.ToCsv 20150620_multilingual_en_es_fr_it_ro.txt filter.txt</exec.args>
+                <exec.args>-classpath %classpath eu.digitisation.idiomaident.utils.ToCsv 20150715_multilingual_en_es_fr_it_pt_ro.txt filter.txt</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.workingdir>C:\investigacion\europarl</exec.workingdir>
             </properties>
@@ -25,7 +25,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath eu.digitisation.idiomaident.utils.ToCsv 20150620_multilingual_en_es_fr_it_ro.txt filter.txt</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath eu.digitisation.idiomaident.utils.ToCsv 20150715_multilingual_en_es_fr_it_pt_ro.txt filter.txt</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
                 <exec.workingdir>C:\investigacion\europarl</exec.workingdir>
@@ -41,7 +41,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath eu.digitisation.idiomaident.utils.ToCsv 20150620_multilingual_en_es_fr_it_ro.txt filter.txt</exec.args>
+                <exec.args>-classpath %classpath eu.digitisation.idiomaident.utils.ToCsv 20150715_multilingual_en_es_fr_it_pt_ro.txt filter.txt</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.workingdir>C:\investigacion\europarl</exec.workingdir>
             </properties>

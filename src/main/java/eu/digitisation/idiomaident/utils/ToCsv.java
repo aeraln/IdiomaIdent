@@ -20,9 +20,12 @@ package eu.digitisation.idiomaident.utils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 /**
  *
@@ -81,10 +84,10 @@ public class ToCsv
             if ( total < 1000)
                 return null;
             
-            if ( sArray[0].length() > 5 )
+            if ( sArray[0].length() > 6 )
                 return null;
             
-            if ( sArray[0].matches(".*[¼™!\"#$%&()©€*+,-./:;<=>?@\\^_`{|}~]+.*"))
+            if ( sArray[0].matches(".*[¹º›»¨°�±“³£¶�²ª¬½'‰¤®«¼™!\"#$%&()©€*+,-./:;<=>?@\\^_`{|}~]+.*"))
                 return null;
             
             if ( sArray[0].matches(".*\\{Digit}+.*"))
@@ -121,16 +124,16 @@ public class ToCsv
     {
         FileReader freader = null;
         BufferedReader buffreader = null;
-        FileWriter fwriter = null;
-        BufferedWriter buffwriter = null;
+        FileOutputStream fwriter = null;
+        OutputStreamWriter buffwriter = null;
 
         try
         {
             freader = new FileReader(in);
             buffreader = new BufferedReader(freader);
 
-            fwriter = new FileWriter(out);
-            buffwriter = new BufferedWriter(fwriter);
+            fwriter = new FileOutputStream(out);
+            buffwriter = new OutputStreamWriter(fwriter, Charset.forName("UTF8"));
 
             String line;
 
