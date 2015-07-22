@@ -42,13 +42,19 @@ public class ExtractTestSamples
         try
         {
             fileOS = new FileOutputStream(outFile);
-            outSWriter = new OutputStreamWriter(fileOS, Charset.forName("UTF8"));                        
+            outSWriter = new OutputStreamWriter(fileOS, Charset.forName("UTF8"));
             
-            for (int num = 0; num < numSamples; num++)
+            int num = 0;
+            while (num < numSamples)            
             {
                 String sample = nextSample(inFolder);
                 
+                if (sample == null)
+                    continue;
+                
                 outSWriter.write(sample);
+                num++;
+                System.out.println("Generating " + num + " of " + numSamples + " samples");
             }                        
             
             outSWriter.flush();
@@ -99,7 +105,16 @@ public class ExtractTestSamples
         try
         {
             String text = FileUtils.readFileToString(langFile, Charset.forName("UTF-8"));
+            
             text = StringNormalize.stringNormalize(text);
+            
+            text = text.replaceAll("[\\n.,:;]", " ");
+            text = text.trim();
+            
+            if (text.replaceAll("[\\p{Space}]+","").length() < 20)
+            {
+                return null;
+            }
             
             //split the text in words
             String[] words = text.split("[\\p{Space}]+");
@@ -132,7 +147,7 @@ public class ExtractTestSamples
             }
             
             //complete the sample
-            sampleBuild.append(";");
+            sampleBuild.insert(sampleBuild.length()-1,";");
             sampleBuild.append(lang);
             sampleBuild.append("\n");
             
