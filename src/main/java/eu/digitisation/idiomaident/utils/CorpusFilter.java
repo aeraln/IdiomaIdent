@@ -80,7 +80,7 @@ public class CorpusFilter
         } 
         catch (IOException ex)
         {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.toString());
         }                
         
         return null;

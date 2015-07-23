@@ -62,7 +62,7 @@ public class ExtractTestSamples
         }
         catch(IOException ex)
         {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.toString());
         }
         finally
         {
@@ -75,7 +75,7 @@ public class ExtractTestSamples
             }
             catch(IOException ex)
             {
-                System.out.println(ex.getMessage());
+                System.out.println(ex.toString());
             }
         }
                 
@@ -156,7 +156,7 @@ public class ExtractTestSamples
         }
         catch(IOException ex)
         {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.toString());
         }
         
         return null;

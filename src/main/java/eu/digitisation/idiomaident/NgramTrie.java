@@ -114,7 +114,7 @@ public class NgramTrie implements Serializable
         }
         catch (IOException ex)
         {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.toString());
         }
         finally 
         {
@@ -125,7 +125,7 @@ public class NgramTrie implements Serializable
             }
             catch (IOException ex)
             {
-                System.out.println(ex.getMessage());
+                System.out.println(ex.toString());
             }
         }                
     }
@@ -147,7 +147,7 @@ public class NgramTrie implements Serializable
         }
         catch (IOException | ClassNotFoundException ex)
         {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.toString());
         }
         finally 
         {
@@ -158,7 +158,7 @@ public class NgramTrie implements Serializable
             }
             catch (IOException ex)
             {
-                System.out.println(ex.getMessage());
+                System.out.println(ex.toString());
             }
         }  
         

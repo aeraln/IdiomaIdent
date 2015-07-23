@@ -20,6 +20,7 @@ package eu.digitisation.idiomaident;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -27,24 +28,41 @@ import java.util.HashMap;
  */
 public class DetectLang
 {
-    private final NgramTrie ngrams;
+    private NgramTrie ngrams;
     private final int TAMNGRAM = 5;
+    
+    public DetectLang()
+    {
+        ngrams = null;
+    }
     
     public DetectLang(File trieFile)
     {
         ngrams = NgramTrie.readTrie(trieFile);
     }
     
+    public void setNgrams(NgramTrie trie)
+    {
+        ngrams = trie;
+    }
+    
     public String language(String text)
-    {       
-        ArrayList<String> textNgrams = generateNgrams(text, TAMNGRAM);
-        
-        //voting
-        HashMap<String, Integer> votes = doVoting(textNgrams);
-        
-        //return the most voted
-        
-        return mostVoted(votes);        
+    {               
+        if (ngrams != null)        
+        {
+            ArrayList<String> textNgrams = generateNgrams(text, TAMNGRAM);
+
+            //voting
+            HashMap<String, Integer> votes = doVoting(textNgrams);
+
+            //return the most voted
+
+            return mostVoted(votes);        
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private ArrayList<String> generateNgrams(String text, int TAMNGRAM)
@@ -58,7 +76,7 @@ public class DetectLang
         else 
         {   
             ngrams = new ArrayList<>();
-            for (int high = 2; high <= text.length(); ++high) 
+            for (int high = 1; high <= text.length(); ++high) 
             {
                 for (int low = Math.max(0, high - TAMNGRAM); low < high; ++low) 
                 {
@@ -73,7 +91,27 @@ public class DetectLang
 
     private HashMap<String, Integer> doVoting(ArrayList<String> textNgrams)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        HashMap<String, Integer> votes = new HashMap<>();
+        
+        HashSet<String> langs;
+        
+        for (String ngram : textNgrams)
+        {
+            langs = ngrams.characteristicLang(ngram);
+            for (String lang: langs)
+            {
+                if (votes.containsKey(lang))
+                {
+                    votes.put(lang, votes.get(lang)+1);                    
+                }
+                else
+                {
+                    votes.put(lang, 1);
+                }
+            }
+        }
+        
+        return votes;
     }
 
     private String mostVoted(HashMap<String, Integer> votes)
@@ -83,9 +121,11 @@ public class DetectLang
         
         for (String lang: votes.keySet())
         {
-            if ( votes.get(lang) >= nVotes )
+            int langVote = votes.get(lang);
+            if ( langVote >= nVotes )
             {
                 best = lang;
+                nVotes = langVote;
             }
         }
         
