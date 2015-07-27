@@ -167,14 +167,17 @@ public class DetectLangTest
         when(trie.characteristicLang("h")).thenReturn(new HashSet<>(Arrays.asList("es", "it", "en", "ro")));
         when(trie.characteristicLang("ho")).thenReturn(new HashSet<>(Arrays.asList("es", "it", "ro")));
         when(trie.characteristicLang("hol")).thenReturn(new HashSet<>(Arrays.asList("es", "it")));
-        when(trie.characteristicLang("hola")).thenReturn(new HashSet<>(Arrays.asList("es")));
-        when(trie.characteristicLang(anyString())).thenReturn(new HashSet<>(Arrays.asList("es", "it", "en", "ro")));               
+        when(trie.characteristicLang("hola")).thenReturn(new HashSet<>(Arrays.asList("es")));                      
                               
         dtector.setNgrams(trie);
                    
         String lang = dtector.language("hola");
         
         Assert.assertEquals(result, lang);
+        
+        lang = dtector.language("adios");
+        
+        Assert.assertEquals("", lang);
         
     }
     

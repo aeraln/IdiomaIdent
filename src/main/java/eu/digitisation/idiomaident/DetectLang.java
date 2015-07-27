@@ -57,7 +57,10 @@ public class DetectLang
 
             //return the most voted
 
-            return mostVoted(votes);        
+            if (votes != null)                
+                return mostVoted(votes);
+            else
+                return "";
         }
         else
         {
@@ -98,17 +101,20 @@ public class DetectLang
         for (String ngram : textNgrams)
         {
             langs = ngrams.characteristicLang(ngram);
-            for (String lang: langs)
+            if(langs != null)
             {
-                if (votes.containsKey(lang))
+                for (String lang: langs)
                 {
-                    votes.put(lang, votes.get(lang)+1);                    
+                    if (votes.containsKey(lang))
+                    {
+                        votes.put(lang, votes.get(lang)+1);                    
+                    }
+                    else
+                    {
+                        votes.put(lang, 1);
+                    }
                 }
-                else
-                {
-                    votes.put(lang, 1);
-                }
-            }
+            }            
         }
         
         return votes;
