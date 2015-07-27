@@ -18,14 +18,13 @@
 package eu.digitisation.idiomaident.utils;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.Locale;
 
 /**
  *
@@ -96,7 +95,7 @@ public class ToCsv
             //porcentajes
             for (int i = 1; i<7; i++)
             {
-                sArray[i] = String.format("%.3g", Double.parseDouble(sArray[i]) / total);
+                sArray[i] = String.format(Locale.ENGLISH, "%.3g", (Double.parseDouble(sArray[i]) / total) * 100);
             }
             
             
@@ -105,10 +104,10 @@ public class ToCsv
             for (String trozo : sArray)
             {                
                 sbuild.append(trozo);
-                sbuild.append('\t');
+                sbuild.append(';');
             }
             
-            sbuild.replace(sbuild.lastIndexOf("\t"), sbuild.length(), "\n");
+            sbuild.replace(sbuild.lastIndexOf(";"), sbuild.length(), "\n");
             
             return sbuild.toString();
 
@@ -137,7 +136,7 @@ public class ToCsv
 
             String line;
 
-            buffwriter.write("String,English,Spanish,French,Italian,Portuguese,Romanian,Total\n");
+            //buffwriter.write("String,English,Spanish,French,Italian,Portuguese,Romanian,Total\n");
             
             while ((line = buffreader.readLine()) != null)
             {

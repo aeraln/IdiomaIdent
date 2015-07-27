@@ -54,6 +54,14 @@ public class NgramTrieTest
         instance.addNgram("adios");
         
         Assert.assertEquals(result, instance.treeNgrams());
+        
+        
+        result = new HashSet(Arrays.asList("h","ho","hol","hola","hola ","hola a","hola ad","hola adi","hola adio","hola adios"));
+                        
+        instance = new NgramTrie();
+        instance.addNgram("hola adios");        
+        
+        Assert.assertEquals(result, instance.treeNgrams());
     }
 
     /**
