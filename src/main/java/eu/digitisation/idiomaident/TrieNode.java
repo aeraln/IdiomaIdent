@@ -87,7 +87,7 @@ public class TrieNode implements Serializable
         {
             Character g = ngram.charAt(0);
             
-            if(childrens.containsKey(g))
+            if(childrens != null && childrens.containsKey(g))
             {
                 return childrens.get(g).characteristicLang(ngram.substring(1));
             }   

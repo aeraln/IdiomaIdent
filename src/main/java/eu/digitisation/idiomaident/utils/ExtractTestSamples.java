@@ -25,7 +25,6 @@ import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Random;
 import org.apache.commons.io.FileUtils;
-import org.apache.james.mime4j.dom.datetime.DateTime;
 
 /**
  *
@@ -147,9 +146,8 @@ public class ExtractTestSamples
             }
             
             //complete the sample
-            sampleBuild.insert(sampleBuild.length()-1,";");
-            sampleBuild.append(lang);
-            sampleBuild.append("\n");
+            sampleBuild.deleteCharAt(sampleBuild.length()-1);
+            sampleBuild.append(";").append(lang).append("\n");
             
             return sampleBuild.toString();
             

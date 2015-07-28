@@ -9,8 +9,10 @@ Without this configuration present, some functionality in the IDE may be limited
     <config-data xmlns="http://www.netbeans.org/ns/maven-config-data/1">
         <configurations>
             <configuration id="CorpusFilter" profiles=""/>
-            <configuration id="toCsv" profiles=""/>
+            <configuration id="generateTrie" profiles=""/>
             <configuration id="testSamples" profiles=""/>
+            <configuration id="toCsv" profiles=""/>
+            <configuration id="DoTest" profiles=""/>
         </configurations>
     </config-data>
 </project-shared-configuration>

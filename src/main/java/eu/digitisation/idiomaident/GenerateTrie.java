@@ -19,8 +19,10 @@ package eu.digitisation.idiomaident;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 
 /**
@@ -32,13 +34,16 @@ public class GenerateTrie
     public static void generateTrie(File input, File output, int minStat, int maxStat)
     {
         NgramTrie trie = new NgramTrie();
-        FileReader freader = null;
+        FileInputStream finput = null;
+        InputStreamReader ireader = null;
         BufferedReader reader = null;
         
         try
         {
-            freader = new FileReader(input);
-            reader = new BufferedReader(freader);
+            
+            finput = new FileInputStream(input);
+            ireader = new InputStreamReader(finput, Charset.forName("UTF8"));
+            reader = new BufferedReader(ireader);
             
             String line;
             
@@ -78,11 +83,11 @@ public class GenerateTrie
         }
         finally
         {
-            if(freader!=null)
+            if(ireader!=null)
             {
                 try
                 {
-                    freader.close();                    
+                    ireader.close();                    
                 } catch (IOException ex)
                 {
                     System.out.println(ex.toString());
@@ -113,5 +118,25 @@ public class GenerateTrie
         }
         
         return null;
+    }
+    
+    public static void main(String args[])
+    {
+        if (args.length < 4)
+        {
+            System.err.println("Usage: GenerateTrie"
+                    + "input output minStat maxStat");
+        } else
+        {
+            File inFile = new File(args[0]);
+            File outFile = new File(args[1]);
+            int minStat = Integer.parseInt(args[2]);
+            int maxStat = Integer.parseInt(args[3]);
+           
+            if(inFile.exists() && !inFile.isDirectory())
+            {                                
+                generateTrie(inFile, outFile, minStat, maxStat);
+            }
+        }
     }
 }
